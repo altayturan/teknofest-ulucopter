@@ -12,7 +12,7 @@ iha = dk.connect(connection_string,wait_ready=True)
 pistbaslangic = dk.LocationGlobalRelative(-35.36339578,149.16527995,10)
 pistbitis = dk.LocationGlobalRelative(-35.36271838 ,149.16526675,10)
 turtamam2spline = dk.LocationGlobalRelative( -35.36252214,149.16502282,10)
-atesöncesi = dk.LocationGlobalRelative(-35.36271569, 149.16477890,10)
+atesoncesi = dk.LocationGlobalRelative(-35.36271569, 149.16477890,10)
 atesbaslangic = dk.LocationGlobalRelative(-35.36271569 ,149.16477890,10)  
 atesbitis = dk.LocationGlobalRelative( -35.36338235 ,149.16480198 ,10)
 turtamam1spline = dk.LocationGlobalRelative( -35.36356783, 149.16505910 ,10)
@@ -59,7 +59,7 @@ def konum():
     print("Konum alındı.")
     return wp
 
-def yükseklik(alt):
+def yukseklik(alt):
     iha.simple_goto((dk.LocationGlobalRelative(iha.location.global_relative_frame.lat,iha.location.global_relative_frame.lon,alt)))
     if alt<iha.location.global_relative_frame.alt:
         print("İnis yapılıyor.")
@@ -192,7 +192,7 @@ def suAlma():
     time.sleep(5)
     print("Su alındı")
 
-def suBırakma():
+def suBirakma():
     print("Su bırakılıyor.")
     msg = iha.message_factory.command_long_encode(
             0, 0,    # target_system, target_component
@@ -225,7 +225,7 @@ cmds.wait_ready()
 cmds.clear() #
 cmd1 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,pistbitis.lat,pistbitis.lon,ucusseviye)
 cmd2 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,turtamam2spline.lat,turtamam2spline.lon,ucusseviye)
-cmd3 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,atesöncesi.lat,atesöncesi.lon,ucusseviye)
+cmd3 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,atesoncesi.lat,atesoncesi.lon,ucusseviye)
 cmd4 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 2 #HIZ
                                                                                                                 , -1, 0, 0, 0, 0,0)
 cmd5 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbaslangic.lon,ucusseviye)
@@ -298,7 +298,7 @@ try:
                 centerX,centerY,width,height = maviAlgila()
                 is_ortalandi=ortala(centerX,centerY,width,height)
 
-            yükseklik(suseviye)
+            yukseklik(suseviye)
             suAlma()
             git(ates)
             time.sleep()
@@ -312,7 +312,7 @@ try:
                 centerX,centerY,width,height = kirmiziAlgila()
                 is_ortalandi=ortala(centerX,centerY,width,height)
             
-            suBırakma()
+            suBirakma()
 
             iha.commands.next = 14
 
