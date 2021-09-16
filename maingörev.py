@@ -24,7 +24,7 @@ splinesonra2 = dk.LocationGlobalRelative(40.2317073,28.8730272,10)
 havuzöncesi = dk.LocationGlobalRelative(40.2321260,28.8730319 ,10)
 
 
-havuz = dk.LocationGlobalRelative(40.2321807,28.8730282,10)
+havuz = dk.LocationGlobalRelative(40.2321604,28.8730442,10)
 ates = iha.location.global_relative_frame
 
 ####################### VARIABLES #############################
