@@ -100,7 +100,7 @@ def kirmiziAlgila():
         hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         kernal = np.ones((5,5),"uint8")
         
-        low_red = np.array([155, 120, 92])
+        low_red = np.array([162, 75, 160])
         high_red = np.array([179, 255, 255])
         
         red_mask = cv2.inRange(hsv, low_red, high_red)
