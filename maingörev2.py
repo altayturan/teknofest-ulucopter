@@ -274,6 +274,8 @@ try:
             ates = konum()
             print("Kırmızı Konum: ",ates)
         if nextwaypoint == 13:
+            mode("BRAKE")
+            time.sleep(2)
             mode("GUIDED")
             send_velocity(0,0,1,6)
             suAlma()
