@@ -5,7 +5,7 @@ import cv2
 from dronekit import mavlink
 import numpy as np
 from pymavlink import mavutil
-#import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO 
 
 ######################### CONNECTION git##########################
 connection_string = "/dev/ttyUSB0"  #/dev/serial0    baud = 921600
@@ -54,7 +54,7 @@ def mode(mode):
         print(f"Mod değiştiriliyor. {mode} ")
         time.sleep(1)
 
-def git(wp,gs=10):                       
+def git(wp,gs=5):                       
     iha.simple_goto(wp,groundspeed = gs)
     print("Waypointe doğru gidiliyor.")
 
@@ -173,37 +173,37 @@ def ortala(centerX,centerY,width,height):
 
 def suAlma():
     print("Su alınıyor.")
-    #GPIO.setmode(GPIO.BCM) 
-    #GPIO.setup(12, GPIO.OUT) 
-    #GPIO.output(12,GPIO.HIGH) 
+    GPIO.setmode(GPIO.BCM) 
+    GPIO.setup(12, GPIO.OUT) 
+    GPIO.output(12,GPIO.HIGH) 
     time.sleep(5) 
-    #GPIO.output(12,GPIO.LOW)
-    #GPIO.cleanup()
+    GPIO.output(12,GPIO.LOW)
+    GPIO.cleanup()
     print("Su alındı")
 
 def suBirakma():
     print("Su bırakılıyor.")
-    # msg = iha.message_factory.command_long_encode(
-    #         0, 0,   
-    #         mavutil.mavlink.MAV_CMD_DO_SET_SERVO,
-    #         0, 
-    #         13,            # servo number
-    #         1000,          # servo position between 1000 and 2000
-    #         0, 0, 0, 0, 0)
+    msg = iha.message_factory.command_long_encode(
+            0, 0,   
+            mavutil.mavlink.MAV_CMD_DO_SET_SERVO,
+            0, 
+            13,            # servo number
+            1000,          # servo position between 1000 and 2000
+            0, 0, 0, 0, 0)
 
-    # iha.send_mavlink(msg)
+    iha.send_mavlink(msg)
     time.sleep(3)
     print("Su bırakıldı.")
-    # msg = iha.message_factory.command_long_encode(
-    #         0, 0,    
-    #         mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 
-    #         0, 
-    #         13,            # servo number
-    #         1500,          # servo position between 1000 and 2000
-    #         0, 0, 0, 0, 0)    
+    msg = iha.message_factory.command_long_encode(
+            0, 0,    
+            mavutil.mavlink.MAV_CMD_DO_SET_SERVO, 
+            0, 
+            13,            # servo number
+            1500,          # servo position between 1000 and 2000
+            0, 0, 0, 0, 0)    
 
      
-    # iha.send_mavlink(msg)
+    iha.send_mavlink(msg)
 
 ########################### MISSION ##############################
 cmds = iha.commands
@@ -216,22 +216,26 @@ cmd1 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavut
 cmd2 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splineöncesi1.lat,splineöncesi1.lon,ucusseviye)
 cmd3 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,spline1.lat,spline1.lon,ucusseviye)
 cmd4 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbitis.lon,ucusseviye)
-cmd5 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbitis.lat,atesbitis.lon,ucusseviye)
-cmd6 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,spline2.lat,spline2.lon,ucusseviye)
-cmd7 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
-cmd7 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuzöncesi.lat,havuzöncesi.lon,ucusseviye)
-cmd8 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
-                                                                                                                ,3, 0, 0, 0, 0,0)
-cmd9 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuz.lat,havuz.lon,ucusseviye)
-cmd10 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesöncesi.lat,atesöncesi.lon,ucusseviye)
-cmd11 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbaslangic.lon,ucusseviye)
-cmd12 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbitis.lat,atesbitis.lon,ucusseviye)
-cmd13 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
+cmd5 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ
+                                                                                                                ,5, 0, 0, 0, 0,0)
+cmd6 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbitis.lat,atesbitis.lon,ucusseviye)
+cmd7 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ
                                                                                                                 ,15, 0, 0, 0, 0,0)
-cmd14 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,spline2.lat,spline2.lon,ucusseviye)
-cmd15 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
+cmd8 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,spline2.lat,spline2.lon,ucusseviye)
+cmd9 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
+cmd10 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuzöncesi.lat,havuzöncesi.lon,ucusseviye)
+cmd11 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
+                                                                                                                ,3, 0, 0, 0, 0,0)
+cmd12 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuz.lat,havuz.lon,ucusseviye)
+cmd13 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesöncesi.lat,atesöncesi.lon,ucusseviye)
+cmd14 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbaslangic.lon,ucusseviye)
+cmd15 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbitis.lat,atesbitis.lon,ucusseviye)
+cmd16 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
+                                                                                                                ,15, 0, 0, 0, 0,0)
+cmd17 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,spline2.lat,spline2.lon,ucusseviye)
+cmd18 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
 
-cmd16 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,baslangic.lat,baslangic.lon,ucusseviye)
+cmd19 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,baslangic.lat,baslangic.lon,ucusseviye)
 
 cmds.add(cmd1)
 cmds.add(cmd2)
@@ -249,6 +253,9 @@ cmds.add(cmd13)
 cmds.add(cmd14)
 cmds.add(cmd15)
 cmds.add(cmd16)
+cmds.add(cmd17)
+cmds.add(cmd18)
+cmds.add(cmd19)
 
 cmds.upload() 
 ################################################################
@@ -263,16 +270,16 @@ try:
     while True:
         nextwaypoint = iha.commands.next
 
-        if nextwaypoint == 10:
+        if nextwaypoint == 13:
             mode("BRAKE")
             mode("GUIDED")
             yukseklik(suseviye)
             suAlma()
-            yukseklik(10)
-            iha.commands.next = 11
+            yukseklik(5)
+            iha.commands.next = 14
             mode("AUTO")
 
-        if nextwaypoint == 12:
+        if nextwaypoint == 15:
             is_ortalandi=False
 
             while is_ortalandi==False:
@@ -283,10 +290,10 @@ try:
             yukseklik(atesseviye)
             suBirakma()
             yukseklik(ucusseviye)            
-            iha.commands.next = 13
+            iha.commands.next = 16
             mode("AUTO")
             
-        if nextwaypoint ==16:
+        if nextwaypoint ==19:
             mode("RTL")
             break
         
