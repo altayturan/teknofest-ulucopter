@@ -5,11 +5,11 @@ import cv2
 from dronekit import mavlink
 import numpy as np
 from pymavlink import mavutil
-#import RPi.GPIO as GPIO 
+import RPi.GPIO as GPIO 
 
 ######################### CONNECTION git##########################
-connection_string = "127.0.0.1:14550"  #/dev/serial0    baud = 921600
-iha = dk.connect(connection_string,wait_ready=True)
+connection_string = "/dev/ttyUSB0"  #/dev/serial0    baud = 921600
+iha = dk.connect(connection_string,wait_ready=True,baud=921600)
 
 ######################### LOCATIONS  ##########################
 baslangic = dk.LocationGlobalRelative(40.2319244005455,28.87331770733,10)
@@ -28,10 +28,10 @@ havuz = dk.LocationGlobalRelative(40.2321604,28.8730442,10)
 ates = iha.location.global_relative_frame
 
 ####################### VARIABLES #############################
-ortalamapayi = 60
-suseviye = 2
-ucusseviye = 7
-atesseviye = 2
+ortalamapayi = 70
+
+
+
 
 ######################### FUNCS ###############################
 def takeoff(alt):
@@ -59,21 +59,8 @@ def git(wp,gs=5):
     iha.simple_goto(wp,groundspeed = gs)
     print("Waypointe doğru gidiliyor.")
 
-
-def yukseklik(alt):
-    mode("GUIDED")
-    iha.simple_goto((dk.LocationGlobalRelative(iha.location.global_relative_frame.lat,iha.location.global_relative_frame.lon,alt)))
-    if alt<iha.location.global_relative_frame.alt:
-        print("İnis yapılıyor.")
-        while iha.location.global_relative_frame.alt > alt*1.15:
-            time.sleep(1)
-    
-    elif alt>iha.location.global_relative_frame.alt:
-        print("Kalkış yapılıyor.")
-        while iha.location.global_relative_frame.alt < alt*0.85:
-            time.sleep(1)
-    
-    print("Hedef yüksekliğe ulaşıldı.")
+def konum():
+    return iha.location.global_relative_frame
 
 def send_velocity(velocity_x, velocity_y, velocity_z, duration=0):
     msg = iha.message_factory.set_position_target_local_ned_encode(0,0, 0, 
@@ -91,10 +78,8 @@ def send_velocity(velocity_x, velocity_y, velocity_z, duration=0):
 def kirmiziAlgila():
     camera = cv2.VideoCapture(0)
     
-    width = 640
-    height = 480
-    camera.set(3, width)
-    camera.set(4, height)
+    camera.set(3,640)
+    camera.set(4,480)
     
     while True:
         _,frame = camera.read()
@@ -114,9 +99,9 @@ def kirmiziAlgila():
         
         for pic, contour in enumerate(contours_red):
             area = cv2.contourArea(contour)
-            if area > 6000 :
+            if area > 8000 :
                 time.sleep(1)
-                mode("BRAKE")
+                
                 x, y, w, h = cv2.boundingRect(contour)
                 centerX = x+(w//2)
                 centerY = y+(h//2)
@@ -131,55 +116,55 @@ def kirmiziAlgila():
 
 
 def goDOGU(süre):
-    send_velocity(0,0.35,0,süre)                             # BURADAKİ 2 M/S HIZ ÇOK FAZLADIR SİMİLASYON İÇİN YAPILMIŞTIR LÜTFEN UYGUN DEĞERLER GİRİNİZ VE İŞARETLERİ
+    send_velocity(0,0.30,0,süre)                             # BURADAKİ 2 M/S HIZ ÇOK FAZLADIR SİMİLASYON İÇİN YAPILMIŞTIR LÜTFEN UYGUN DEĞERLER GİRİNİZ VE İŞARETLERİ
                                                           # DEĞİŞTİRMEYİNİZ.
 def goBATI(süre):
-    send_velocity(0,-0.35,0,süre)
+    send_velocity(0,-0.30,0,süre)
 
 def goKUZEY(süre):
-    send_velocity(0.35,0,0,süre)
+    send_velocity(0.30,0,0,süre)
 
 def goGUNEY(süre):
-    send_velocity(-0.35,0,0,süre)
+    send_velocity(-0.30,0,0,süre)
 
 def ortala(centerX,centerY,width,height):
     mode("GUIDED")
     
     is_ortalandi = False
     
-    if centerX < width//2-ortalamapayi:
+    if centerX <320-ortalamapayi:
         print("Solda")
         goBATI(1)
         return is_ortalandi
     
-    if centerX > width//2+ortalamapayi:
+    if centerX > 320+ortalamapayi:
         print("Sagda")
         goDOGU(1)
         return is_ortalandi
     
-    if centerY > height//2+ortalamapayi:
+    if centerY > 240+ortalamapayi:
         print("Aşağıda")
         goGUNEY(1)
         return is_ortalandi
     
-    if centerY < height//2-ortalamapayi:
+    if centerY <240-ortalamapayi:
         print("Yukarda")
         goKUZEY(1)
         return is_ortalandi
     
-    if centerX >= width//2-ortalamapayi and centerX <= width//2+ortalamapayi and centerY <= height//2+ortalamapayi and centerY >= height//2-ortalamapayi:
+    if centerX >=320-ortalamapayi and centerX <= 320+ortalamapayi and centerY <=240+ortalamapayi and centerY >= 240-ortalamapayi:
         print("ortalandı")
         is_ortalandi = True
         return is_ortalandi
 
 def suAlma():
     print("Su alınıyor.")
-    #GPIO.setmode(GPIO.BCM) 
-    #GPIO.setup(12, GPIO.OUT) 
-    #GPIO.output(12,GPIO.HIGH) 
-    time.sleep(5) 
-    #GPIO.output(12,GPIO.LOW)
-    #GPIO.cleanup()
+    GPIO.setmode(GPIO.BCM) 
+    GPIO.setup(12, GPIO.OUT) 
+    GPIO.output(12,GPIO.HIGH) 
+    time.sleep(10) 
+    GPIO.output(12,GPIO.LOW)
+    GPIO.cleanup()
     print("Su alındı")
 
 def suBirakma():
@@ -193,7 +178,7 @@ def suBirakma():
             0, 0, 0, 0, 0)
 
     iha.send_mavlink(msg)
-    time.sleep(3)
+    time.sleep(5)
     print("Su bırakıldı.")
     msg = iha.message_factory.command_long_encode(
             0, 0,    
@@ -273,19 +258,22 @@ cmds.upload()
 try:
     mode("GUIDED")
     arm()
-    takeoff(ucusseviye)
+    takeoff(10)
 
     iha.commands.next=0
 
     mode("AUTO")
     while True:
         nextwaypoint = iha.commands.next
-
+        if nextwaypoint == 6:
+            kirmiziAlgila()
+            ates = konum()
+            print("Kırmızı Konum: ",ates)
         if nextwaypoint == 13:
             mode("BRAKE")
-            yukseklik(suseviye)
+            send_velocity(0,0,1,5)
             suAlma()
-            yukseklik(5)
+            send_velocity(0,0,-1,5)
             iha.commands.next = 14
             mode("AUTO")
 
@@ -294,12 +282,25 @@ try:
 
             while is_ortalandi==False:
                 centerX2,centerY2,width2,height2 = kirmiziAlgila()
+                mode("BRAKE")
                 is_ortalandi=ortala(centerX2,centerY2,width2,height2)
                 time.sleep(1.5)
-
-            yukseklik(atesseviye)
+    
+            send_velocity(0,0,1,3)
+            while is_ortalandi==False:
+                centerX2,centerY2,width2,height2 = kirmiziAlgila()
+                mode("BRAKE")
+                is_ortalandi=ortala(centerX2,centerY2,width2,height2)
+                time.sleep(1.5)
+            send_velocity(0,0,1,3)
+            while is_ortalandi==False:
+                centerX2,centerY2,width2,height2 = kirmiziAlgila()
+                mode("BRAKE")
+                is_ortalandi=ortala(centerX2,centerY2,width2,height2)
+                time.sleep(1.5)
+    
             suBirakma()
-            yukseklik(ucusseviye)            
+            send_velocity(0,0,-2,3)           
             iha.commands.next = 18
             mode("AUTO")
             
