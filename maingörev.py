@@ -1,4 +1,4 @@
-from operator import ne
+1from operator import ne
 import dronekit as dk
 import time
 import cv2
@@ -173,12 +173,12 @@ def ortala(centerX,centerY,width,height):
 
 def suAlma():
     print("Su alınıyor.")
-    GPIO.setmode(GPIO.BCM) 
-    GPIO.setup(12, GPIO.OUT) 
-    GPIO.output(12,GPIO.HIGH) 
-    time.sleep(15) 
-    GPIO.output(12,GPIO.LOW)
-    GPIO.cleanup()
+    #GPIO.setmode(GPIO.BCM) 
+    #GPIO.setup(12, GPIO.OUT) 
+    #GPIO.output(12,GPIO.HIGH) 
+    time.sleep(5) 
+    #GPIO.output(12,GPIO.LOW)
+    #GPIO.cleanup()
     print("Su alındı")
 
 def suBirakma():
