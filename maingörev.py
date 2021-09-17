@@ -28,16 +28,16 @@ havuz = dk.LocationGlobalRelative(40.2321604,28.8730442,10)
 ates = iha.location.global_relative_frame
 
 ####################### VARIABLES #############################
-ortalamapayi = 120
+ortalamapayi = 60
 suseviye = 2
-ucusseviye = 10
+ucusseviye = 7
 atesseviye = 2
 
 ######################### FUNCS ###############################
 def takeoff(alt):
     iha.simple_takeoff(alt)
     print("Takeoff yapılıyor.")
-    iha.wait_for_alt(alt)
+    while iha.location.global_relative_frame.alt <= alt*0.85
     print("Takeoff yapıldı.")
 
 def arm():
@@ -60,15 +60,16 @@ def git(wp,gs=10):
 
 
 def yukseklik(alt):
+    mode("GUIDED")
     iha.simple_goto((dk.LocationGlobalRelative(iha.location.global_relative_frame.lat,iha.location.global_relative_frame.lon,alt)))
     if alt<iha.location.global_relative_frame.alt:
         print("İnis yapılıyor.")
-        while iha.location.global_relative_frame.alt > alt*1.05:
+        while iha.location.global_relative_frame.alt > alt*1.15:
             time.sleep(1)
     
     elif alt>iha.location.global_relative_frame.alt:
         print("Kalkış yapılıyor.")
-        while iha.location.global_relative_frame.alt < alt*0.95:
+        while iha.location.global_relative_frame.alt < alt*0.85:
             time.sleep(1)
     
     print("Hedef yüksekliğe ulaşıldı.")
@@ -100,7 +101,7 @@ def kirmiziAlgila():
         hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         kernal = np.ones((5,5),"uint8")
         
-        low_red = np.array([162, 75, 160])
+        low_red = np.array([137, 110, 137])
         high_red = np.array([179, 255, 255])
         
         red_mask = cv2.inRange(hsv, low_red, high_red)
@@ -112,7 +113,8 @@ def kirmiziAlgila():
         
         for pic, contour in enumerate(contours_red):
             area = cv2.contourArea(contour)
-            if area > 5000 :
+            if area > 6000 :
+                time.sleep(1)
                 mode("BRAKE")
                 x, y, w, h = cv2.boundingRect(contour)
                 centerX = x+(w//2)
@@ -128,16 +130,16 @@ def kirmiziAlgila():
 
 
 def goDOGU(süre):
-    send_velocity(0,0.2,0,süre)                             # BURADAKİ 2 M/S HIZ ÇOK FAZLADIR SİMİLASYON İÇİN YAPILMIŞTIR LÜTFEN UYGUN DEĞERLER GİRİNİZ VE İŞARETLERİ
+    send_velocity(0,0.35,0,süre)                             # BURADAKİ 2 M/S HIZ ÇOK FAZLADIR SİMİLASYON İÇİN YAPILMIŞTIR LÜTFEN UYGUN DEĞERLER GİRİNİZ VE İŞARETLERİ
                                                           # DEĞİŞTİRMEYİNİZ.
 def goBATI(süre):
-    send_velocity(0,-0.2,0,süre)
+    send_velocity(0,-0.35,0,süre)
 
 def goKUZEY(süre):
-    send_velocity(0.2,0,0,süre)
+    send_velocity(0.35,0,0,süre)
 
 def goGUNEY(süre):
-    send_velocity(-0.2,0,0,süre)
+    send_velocity(-0.35,0,0,süre)
 
 def ortala(centerX,centerY,width,height):
     mode("GUIDED")
@@ -276,7 +278,7 @@ try:
             while is_ortalandi==False:
                 centerX2,centerY2,width2,height2 = kirmiziAlgila()
                 is_ortalandi=ortala(centerX2,centerY2,width2,height2)
-                time.sleep(2)
+                time.sleep(1)
 
             yukseklik(atesseviye)
             suBirakma()
