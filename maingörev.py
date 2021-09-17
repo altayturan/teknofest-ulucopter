@@ -146,27 +146,27 @@ def ortala(centerX,centerY,width,height):
     
     is_ortalandi = False
     
-    if centerX < width/2-ortalamapayi:
+    if centerX < width//2-ortalamapayi:
         print("Solda")
         goBATI(1)
         return is_ortalandi
     
-    if centerX > width/2+ortalamapayi:
+    if centerX > width//2+ortalamapayi:
         print("Sagda")
         goDOGU(1)
         return is_ortalandi
     
-    if centerY > height/2+ortalamapayi:
+    if centerY > height//2+ortalamapayi:
         print("Aşağıda")
         goGUNEY(1)
         return is_ortalandi
     
-    if centerY < height/2-ortalamapayi:
+    if centerY < height//2-ortalamapayi:
         print("Yukarda")
         goKUZEY(1)
         return is_ortalandi
     
-    if centerX > width/2-ortalamapayi and centerX < width/2+ortalamapayi and centerY < height/2+ortalamapayi and centerY > height/2-ortalamapayi:
+    if centerX >= width//2-ortalamapayi and centerX <= width//2+ortalamapayi and centerY <= height//2+ortalamapayi and centerY >= height//2-ortalamapayi:
         print("ortalandı")
         is_ortalandi = True
         return is_ortalandi
@@ -211,9 +211,10 @@ cmds = iha.commands
 cmds.download()
 cmds.wait_ready()
 cmds.clear() #
-cmd1 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ
+
+cmd1 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splineöncesi1.lat,splineöncesi1.lon,ucusseviye)
+cmd2 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ
                                                                                                                 ,15, 0, 0, 0, 0,0)
-cmd2 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splineöncesi1.lat,splineöncesi1.lon,ucusseviye)
 cmd3 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,spline1.lat,spline1.lon,ucusseviye)
 cmd4 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbitis.lon,ucusseviye)
 cmd5 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ
@@ -225,7 +226,7 @@ cmd8 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavut
 cmd9 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
 cmd10 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuzöncesi.lat,havuzöncesi.lon,ucusseviye)
 cmd11 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
-                                                                                                                ,3, 0, 0, 0, 0,0)
+                                                                                                                ,1, 0, 0, 0, 0,0)
 cmd12 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,havuz.lat,havuz.lon,ucusseviye)
 cmd13 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesöncesi.lat,atesöncesi.lon,ucusseviye)
 cmd14 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,atesbaslangic.lat,atesbaslangic.lon,ucusseviye)
@@ -233,6 +234,7 @@ cmd15 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavu
 cmd16 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_DO_CHANGE_SPEED, 0, 0, 1 #HIZ 
                                                                                                                 ,15, 0, 0, 0, 0,0)
 cmd17 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,spline2.lat,spline2.lon,ucusseviye)
+
 cmd18 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,splinesonra2.lat,splinesonra2.lon,ucusseviye)
 
 cmd19 = dk.Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0,baslangic.lat,baslangic.lon,ucusseviye)
@@ -272,7 +274,6 @@ try:
 
         if nextwaypoint == 13:
             mode("BRAKE")
-            mode("GUIDED")
             yukseklik(suseviye)
             suAlma()
             yukseklik(5)
@@ -285,7 +286,7 @@ try:
             while is_ortalandi==False:
                 centerX2,centerY2,width2,height2 = kirmiziAlgila()
                 is_ortalandi=ortala(centerX2,centerY2,width2,height2)
-                time.sleep(1)
+                time.sleep(1.5)
 
             yukseklik(atesseviye)
             suBirakma()
